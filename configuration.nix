@@ -16,21 +16,26 @@
 
   # Use the Grub EFI boot loader.
   boot.loader.systemd-boot.enable = false;
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.loader.grub.theme = pkgs.stdenv.mkDerivation {
-    pname = "distro-grub-themes";
-    version = "3.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "AdisonCavani";
-      repo = "distro-grub-themes";
-      rev = "v3.1";
-      hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+    theme = pkgs.stdenv.mkDerivation {
+      pname = "distro-grub-themes";
+      version = "3.1";
+      src = pkgs.fetchFromGitHub {
+        owner = "AdisonCavani";
+        repo = "distro-grub-themes";
+        rev = "v3.1";
+        hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+      };
+      installPhase = "cp -r customize/nixos $out";
     };
-    installPhase = "cp -r customize/nixos $out";
+
+  };
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot";
   };
 
   boot = {
@@ -82,33 +87,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.lightdm.greeters = {
-    slick.enable = false;
-    gtk.enable = true;
-    gtk.theme.name = "Tokyonight-Dark";
-  };
-  services.xserver.desktopManager.cinnamon.enable = true;
-
-  # Enable Sway
-  programs.sway = {
-    enable = true;
-    xwayland.enable = true;
-  };
-
-  programs.sway.extraPackages = with pkgs; [
-    brightnessctl
-    foot
-    grim
-    swayidle
-    swaylock
-    wmenu
-  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -171,15 +149,6 @@
     noto-fonts-emoji
     nerd-fonts.iosevka-term-slab
     nerd-fonts.jetbrains-mono
-  ];
-
-  environment.cinnamon.excludePackages = with pkgs; [
-    pix
-    gnome-calculator
-    gnome-calendar
-    xreader
-    xviewer
-    xed-editor
   ];
 
   # Zram
