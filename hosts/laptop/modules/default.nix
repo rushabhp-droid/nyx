@@ -1,0 +1,20 @@
+{
+  imports = [
+    ./hardware-configuration.nix
+    ./fonts.nix
+    ./graphics.nix
+    ./grub.nix
+    ./locale.nix
+    ./misc.nix
+    ./network.nix
+    ./nix-settings.nix
+    ./polkit.nix
+    ./programs.nix
+    ./users.nix
+    ./zram.nix
+    ./hyprland.nix
+    ./audio.nix
+    ./spotify.nix
+    ./prismlauncher.nix
+  ];
+}
